@@ -3,7 +3,7 @@
     height: 100px;
     background-color: skyblue;
     position: absolute;
-    border-radius: 50%;
+    border-radius: 0%;
 }
 
 /* Prevent padding and border from affecting element width. */
