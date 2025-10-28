@@ -1,28 +1,24 @@
-.thing {
-    width: 100px;
-    height: 100px;
-    background-color: skyblue;
-    position: absolute;
-    border-radius: 0%;
-}
-
-/* Prevent padding and border from affecting element width. */
-*,
-::before,
-::after {
-    box-sizing: border-box;
-}
-
-/* Remove the margin in all browsers */
 body {
-    margin: 0;
-    padding: 0;
-    line-height: inherit;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  background: skyblue;
 }
 
-#sample-output {
-    position: fixed;
-    border-radius: 100%;
-    background-color: orange;
+#game {
+html,body{ margin:0; padding:0; height:100%; width:100%; }
+
+#full-size{
+  height:100%;
+  width:100%;
+  overflow:hidden; 
+}
+}
+
+#square {
+  position: absolute;
+  bottom: 10px;
+  left: 180px;
+  width: 50px;
+  height: 50px;
+  background: white;
+  border-radius: 4px;
 }

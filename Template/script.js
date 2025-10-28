@@ -1,15 +1,36 @@
 import * as Util from "./util.js";
-let size = 1;
 
+const square = document.getElementById('square');
+let squareX= 180;
+let speed = 5;
+let squareMoving = []
+
+
+//loop function
 function loop() {
-  Util.setSize(size)
-  size += 0.1
-    window.requestAnimationFrame(loop);
+  update();
+  draw();
+  requestAnimationFrame(loop);
 }
-
+ 
+// future setup here
 function setup() {
-
-  window.requestAnimationFrame(loop);
+  
 }
+
+// move blocks, check collisions
+function update() {
+
+}
+
+function draw() {
+  square.style.left = squareX + 'px';
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'j') squareX -= speed;
+  if (event.key === 'l') squareX += speed;
+});
 
 setup();
+loop();
