@@ -26,3 +26,15 @@ body {
   border-radius: 10%;
   top: 0;
 }
+
+#scoreDisplay {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  font-family: monospace;
+  font-size: 20px;
+  color: black;
+  background: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+}

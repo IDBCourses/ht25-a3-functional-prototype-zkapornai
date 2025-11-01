@@ -1,15 +1,5 @@
 const squareEl = document.getElementById('square');  	              // Get the HTML element with id "square"  
-let square = { x: 600, y: 620, speed: 5, colour: 60, size: 100 };  	// Object storing position, speed, color, and size of the square  
-
- 
-const blocks = [];  	                          // Array to hold all falling block objects  
-let blockCount = 5;  	                        // Number of falling blocks
-for (let i = 0; i < blockCount; i++) {  	      // Loop to create each falling block  
-  let block = document.createElement('div');  	// Create a new div for the block  
-  block.classList.add('fallingBlock');  	      // Add CSS class for styling  
-  document.body.appendChild(block);  	          // Add the block to the page  
-  blocks.push({ el: block, x: Math.random() * window.innerWidth, y: Math.random() * -500 });  	// Store block element with random start position  
-}
+let square = { x: 600, y: 620, speed: 5, colour: 60, size: 100 };  	// Object storing position, speed, color, and size of the square
 
 let fallCount = 0;  	  // Counter for how many blocks have fallen 
 let score = 0;          // Track player score
@@ -18,9 +8,20 @@ let jPressed = false;  	// Track if the "j" key is pressed (move left)
 let lPressed = false;  	// Track if the "l" key is pressed (move right)  
 let aPressed = false;  	// Track if the "a" key is pressed (resize action) 
 
+ const blocks = [];  	                          // Array to hold all falling block objects  
+let blockCount = 5;  	                        // Number of falling blocks
+for (let i = 0; i < blockCount; i++) {  	      // Loop to create each falling block  
+  let block = document.createElement('div');  	// Create a new div for the block  
+  block.classList.add('fallingBlock');  	      // Add CSS class for styling  
+  document.body.appendChild(block);  	          // Add the block to the page  
+  blocks.push({ el: block, x: Math.random() * window.innerWidth, y: Math.random() * -500 });  	// Store block element with random start position  
+}
+
+
+
 function loop() {  	      // Main loop that runs continuously using requestAnimationFrame  
   
-  if (gameOver) return;  	// Stop the loop if the game is over  
+  if (gameOver) return;  	// Stop the loop if the game is over 
 
   // Square movement  
   if (jPressed) square.x -= square.speed;  	// Move left when "j" is pressed  
@@ -48,14 +49,17 @@ function loop() {  	      // Main loop that runs continuously using requestAnima
       b.y = -100;  	                                // Reset it to the top  
       b.x = Math.random() * window.innerWidth;  	 // Random new horizontal position  
       fallCount++;  	                            // Increase fallen block counter  
-      score++;                                      // increase score when a block falls naturally
+      score++;                                      // increase score when a block falls naturally  
       console.log('Block fallen. fallCount:', fallCount, 'score:', score);
+      updateScoreDisplay();                         // <-- frissítsd a képernyőt
     }
     // start continuous rotation when score > 10
-    if (score > 5) {
+    if (score > 10) {
       b._rotation = (b._rotation || 0) + 2;
       b.el.style.transform = `rotate(${b._rotation}deg)`;
     }
+
+   // Update falling blocks position on screen
     b.el.style.left = b.x + 'px';  	 // Update block horizontal position  
     b.el.style.top = b.y + 'px';  	// Update block vertical position  
 
@@ -78,6 +82,8 @@ function loop() {  	      // Main loop that runs continuously using requestAnima
   requestAnimationFrame(loop);  	         // Continue the loop for next animation frame  
 }
 
+
+
 // Keyboard controls  
 document.addEventListener('keydown', (e) => {  	// Detect key press once per keydown  
   if (e.repeat) return;  	                    // Prevent continuous movement while holding the key  
@@ -89,12 +95,17 @@ document.addEventListener('keydown', (e) => {  	// Detect key press once per key
     square.x += 10;  	                        // Move right by 10 pixels  
   }  
   if (e.key === 'a') {  	                    
+    
     // Single shrink timer version (no holding)
     square.size = Math.max(5, square.size - 10);
+    
     // subtract 3 from fallen blocks when using shrink, then set score = fallCount
     fallCount = Math.max(0, fallCount - 3);
     score = fallCount;
     console.log('Shrink used — fallCount:', fallCount, 'score:', score);
+    
+    updateScoreDisplay();                           // <-- frissítsd a képernyőt
+    
     aPressed = true; // allow hold-to-shrink in the main loop (keydown fires once thanks to e.repeat check)
   }
 });
@@ -105,16 +116,16 @@ document.addEventListener('keyup', (e) => {  	// Detect key release
   }  
 });
 
-// Calling setup function to start the game  
-function setup() {  	// Function to initialize the game  
-  loop();  	          // Start the game loop  
-  growSquare();        // Start square growth
-  updateColorLoop();   // Start color updates
-  growBlocks();        // Start block growth
-}
+
+
 
 setup();  	  // Start the game setup when the script loads 
 
+// Update the score display on screen
+function updateScoreDisplay() {
+  const scoreEl = document.getElementById('scoreDisplay');
+  if (scoreEl) scoreEl.textContent = `Score: ${score}`;
+}
 
 //1. The square slowly grows over time (setTimeout version)
 function growSquare() {
@@ -130,6 +141,7 @@ function updateColor() {
   squareEl.style.backgroundColor = `hsl(${hue}, 100%, 40%)`;
 }
 
+// Repeatedly update color
 function updateColorLoop() {
   if (gameOver) return;
   updateColor();
@@ -154,4 +166,15 @@ function growBlocks() {
   blocks.push({ el: block, x: Math.random() * window.innerWidth, y: Math.random() * -500 });
 
   setTimeout(growBlocks, 3000); // repeats every 3s
+}
+
+
+
+// Calling functions to start the game  
+function setup() {  	
+  loop();  	          
+  growSquare();        
+  updateColorLoop();   
+  growBlocks();        
+  updateScoreDisplay(); 
 }
