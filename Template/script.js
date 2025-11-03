@@ -35,7 +35,7 @@ function loop() {  	      // Main loop that runs continuously using requestAnima
     if (moveStartTime === 0) {           // If movement just started
       moveStartTime = currentTime;      // Record the time when movement started
     }
-    // Check if moving for more than 1 second
+    
     isSlowSpeed = (currentTime - moveStartTime) > 1000;                   // slow speed is true if current time more than 1s
     
     const currentSpeed = isSlowSpeed ? square.speed / 2 : square.speed;  // Use half speed if slow speed is active
@@ -94,7 +94,6 @@ function loop() {  	      // Main loop that runs continuously using requestAnima
       bRect.bottom > sRect.top                    // Bottom edge of block is below top edge of square
     ) {  
       gameOver = true;  	                                     // End the game if they collide  
-      console.log('Game Over! Score:', score);  	            // Print result to console  
     }  
   }
 
@@ -117,6 +116,7 @@ document.addEventListener('keydown', (e) => {
         if (moveStartTime === 0) {         // If movement just started
           moveStartTime = currentTime;    // Record the time when movement started
         }
+        
         // Check if moving for more than 1 second
         isSlowSpeed = (currentTime - moveStartTime) > 1000;
         
@@ -180,7 +180,7 @@ function updateScoreDisplay() {
 //1. The square slowly grows over time in 2 seconds (setTimeout version)
 function growSquare() {
   if (gameOver) return;
-  square.size += 10;
+    if (square.size < 150) square.size += 10;
   setTimeout(growSquare, 2000); 
 }
 
@@ -195,7 +195,7 @@ function updateColor() {
 function updateColorLoop() {
   if (gameOver) return;
   updateColor();
-  setTimeout(updateColorLoop, 100); // update every 0.1s
+  setTimeout(updateColorLoop, 100);   // update every 0.1s
 }
 
 
@@ -215,7 +215,8 @@ function growBlocks() {
   document.body.appendChild(block);                                                             // Add the block to the page
   blocks.push({ el: block, x: Math.random() * window.innerWidth, y: Math.random() * -500 });   // Store block element with random start position
 
-  setTimeout(growBlocks, 3000);
+  
+  setTimeout(growBlocks, 3000);                 //growing blocks in every 3 sec and creating new
 }
 
 // Calling functions to start the game  
