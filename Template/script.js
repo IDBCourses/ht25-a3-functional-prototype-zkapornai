@@ -5,7 +5,6 @@ const blockCount = 5;  	                                          // Number of f
 
 // Changing Variables 
 let square = { x: 600, y: 620, speed: 5, colour: 60, size: 100 };  	// Object storing position, speed, color, and size of the square
-let fallCount = 0;  	                                             // Counter for how many blocks have fallen 
 let score = 0;                                                    // Track player score
 let gameOver = false;  	                                         // Boolean to track if the game has ended  
 let aPressed = false;  	                                        // Track if the "a" key is pressed (resize action) 
@@ -19,7 +18,7 @@ for (let i = 0; i < blockCount; i++) {  	      // Loop to create each falling bl
   let block = document.createElement('div');  	// Create a new div for the block  
   block.classList.add('fallingBlock');  	      // Add CSS class for styling  
   document.body.appendChild(block);  	          // Add the block to the page  
-  blocks.push({ el: block, x: Math.random() * window.innerWidth, y: Math.random() * -500, speed: 6 });  	// Store block element with random start position  
+  blocks.push({ el: block, x: Math.random() * window.innerWidth, y: Math.random() * -500});  	// Store block element with random start position  
 }
 
 
@@ -69,7 +68,6 @@ function loop() {  	      // Main loop that runs continuously using requestAnima
     if (b.y > window.innerHeight) {  	               // If block goes below screen  
       b.y = -100;  	                                // Reset it to the top  
       b.x = Math.random() * window.innerWidth;  	 // Random new horizontal position  
-      fallCount++;  	                            // Increase fallen block counter  
       score++;                                      // increase score when a block falls naturally  
       console.log('score:', score);
       updateScoreDisplay();                         // Update score display function. Update screen.
@@ -128,7 +126,7 @@ document.addEventListener('keydown', (e) => {
         if (lPressed) square.x += currentSpeed;    // Move right when "l" is pressed
       } else {
         moveStartTime = 0;  // Reset timer when not moving
-        isSlowSpeed = false; // Reset slow speed flag
+        isSlowSpeed = false;
       }
       
       square.x = Math.min(Math.max(square.x, 0), window.innerWidth - square.size);
@@ -137,7 +135,7 @@ document.addEventListener('keydown', (e) => {
     } else {
       jPressed = true;   // start moving left
       lPressed = false;  // ensure right movement is off
-      moveStartTime = performance.now(); // Record the time when movement started
+      moveStartTime = Date.now(); // Record the time when movement started
     }
   }
   
@@ -147,7 +145,7 @@ document.addEventListener('keydown', (e) => {
     } else {
       lPressed = true;   // start moving right
       jPressed = false;  // ensure left movement is off
-      moveStartTime = performance.now(); // Record the time when movement started
+      moveStartTime = Date.now(); // Record the time when movement started
     }
   }
 
@@ -170,7 +168,6 @@ document.addEventListener('keyup', (e) => {  	// Detect key release
     blocks.forEach(b => b.el.style.backgroundColor = 'white'); // Change back color of all blocks
   }  
 });
-
 
 setup();  	  // Start the game setup when the script loads
 
@@ -207,9 +204,9 @@ function growBlocks() {
   if (gameOver) return;
 
   blocks.forEach(b => {
-    b.el.style.width = b.el.offsetWidth + 3 + 'px';
+    b.el.style.width = b.el.offsetWidth + 3 + 'px';  
     b.el.style.height = b.el.offsetHeight + 3 + 'px';
-    b.speed += 0.5;   // increase falling speed
+   
   });
 
   // Add a new block in a random position and every 3 seconds
